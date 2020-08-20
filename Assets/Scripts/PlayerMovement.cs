@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] Transform groundCheck = null;
     [SerializeField] float checkRadius = 0.4f;
     [SerializeField] LayerMask groundLayer = 0;
+    [SerializeField] Material BGmaterial = null;
+    [SerializeField] Vector2 BGoffset = Vector2.zero;
 
     // Start is called before the first frame update
     void Start()
@@ -34,12 +37,35 @@ public class PlayerMovement : MonoBehaviour
         else if (horizontal < 0)
             transform.GetComponent<SpriteRenderer>().flipX = true;
 
-        if (isGrounded && Input.GetButtonDown("Jump"))
+        if (isGrounded && Input.GetKeyDown(KeyCode.Space))
         {
-            rb.AddForce(Vector2.up * jumpPower,ForceMode2D.Impulse);
-            Debug.Log("Jumped");
+            rb.velocity = new Vector2(0f, jumpPower);
         }
+        if (Input.GetKeyDown(KeyCode.K))
+            Kill();
 
         rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+            if (rb.velocity.x < 0f)
+                BGmaterial.mainTextureOffset -= BGoffset * Time.fixedDeltaTime;
+            else if (rb.velocity.x > 0f)
+                BGmaterial.mainTextureOffset += BGoffset * Time.fixedDeltaTime;
+    }
+
+    private void Kill()
+    {
+        UIManager.instance.RestartGame();
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Death"))
+        {
+            UIManager.instance.RestartGame();
+        }
+        if(collision.CompareTag("Clouds"))
+        {
+            rb.AddForce(Vector2.right * 1000f,ForceMode2D.Impulse);
+            Debug.Log("Clouds!!");
+        }
     }
 }
