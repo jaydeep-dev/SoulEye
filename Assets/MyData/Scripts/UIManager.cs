@@ -1,27 +1,26 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private SceneAsset mainMenu = null;
     [SerializeField] private GameObject pauseMenu = null;
-    public static UIManager instance;
+
+    public static UIManager Instance { get; private set; }
 
     private void Awake()
     {
-        if (instance == null)
-            instance = this;
-        else
-            Destroy(this);
+        Instance = this;
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            pauseMenu.SetActive(true);
+            bool isPaused = !pauseMenu.activeInHierarchy;
+            pauseMenu.SetActive(isPaused);
+            Time.timeScale = isPaused ? 0f : 1f;
         }
     }
 

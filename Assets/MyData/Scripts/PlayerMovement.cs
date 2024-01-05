@@ -12,16 +12,19 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody2D rb = null;
     Animator animator = null;
     bool isGrounded = false;
+    ParticleSystem dustParticles;
 
     private const string HORIZONTAL = "Horizontal";
     private readonly int IsGroundedParam = Animator.StringToHash("IsGrounded");
     private readonly int SpeedParam = Animator.StringToHash("Speed");
+    private readonly int VelocityParam = Animator.StringToHash("Velocity");
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        dustParticles = GetComponentInChildren<ParticleSystem>();
     }
 
     // Update is called once per frame
@@ -31,7 +34,7 @@ public class PlayerMovement : MonoBehaviour
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundLayer);
 
         animator.SetBool(IsGroundedParam, isGrounded);
-        animator.SetFloat("Velocity", rb.velocity.y);
+        animator.SetFloat(VelocityParam, rb.velocity.y);
         animator.SetFloat(SpeedParam, Mathf.Abs(horizontal));
 
         transform.GetComponent<SpriteRenderer>().flipX = horizontal < 0;
@@ -48,19 +51,36 @@ public class PlayerMovement : MonoBehaviour
 
     private void Kill()
     {
-        UIManager.instance.RestartGame();
+        UIManager.Instance.RestartGame();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Death"))
         {
-            UIManager.instance.RestartGame();
+            UIManager.Instance.RestartGame();
         }
         if(collision.CompareTag("Clouds"))
         {
             rb.AddForce(Vector2.right * 1000f,ForceMode2D.Impulse);
             Debug.Log("Clouds!!");
+        }
+        if (collision.CompareTag("Coin"))
+        {
+            Destroy(collision.gameObject);
+        }
+        if(collision.CompareTag("Finish"))
+        {
+            UIManager.Instance.RestartGame();
+        }
+        
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.transform.CompareTag("Ground"))
+        {
+            dustParticles.Play();
         }
     }
 
