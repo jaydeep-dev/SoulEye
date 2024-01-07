@@ -4,19 +4,39 @@ using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] private SceneAsset mainMenu = null;
-    [SerializeField] private GameObject pauseMenu = null;
-
     public static UIManager Instance { get; private set; }
+
+    [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private GameObject mobileInputUI;
+
+    private PlayerInputActions inputActions;
 
     private void Awake()
     {
         Instance = this;
+        inputActions = new PlayerInputActions();
+    }
+
+    private void OnEnable()
+    {
+        inputActions.Enable();
+        inputActions.UI.Enable();
+    }
+
+    private void OnDisable()
+    {
+        inputActions.UI.Disable();
+    }
+
+    private void Start()
+    {
+        bool isPhone = Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer;
+        mobileInputUI.SetActive(isPhone);
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (inputActions.UI.Pause.WasPressedThisFrame())
         {
             bool isPaused = !pauseMenu.activeInHierarchy;
             pauseMenu.SetActive(isPaused);
@@ -24,13 +44,18 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void PlayClicked()
+    {
+        Time.timeScale = 1f;
+    }
+
     public void RestartGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        LevelHandler.Instance.ReloadLevel();
     }
 
     public void HomeBTN()
     {
-        SceneManager.LoadScene(mainMenu.name);
+        LevelHandler.Instance.LoadLevel(Scenes.MainMenu);
     }
 }

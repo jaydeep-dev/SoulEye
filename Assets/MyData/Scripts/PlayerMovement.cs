@@ -3,66 +3,61 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] float speed = 5f;
-    [SerializeField] float jumpPower = 10f;
-    [SerializeField] Transform groundCheck = null;
-    [SerializeField] float checkRadius = 0.4f;
-    [SerializeField] LayerMask groundLayer = 0;
-
-    Rigidbody2D rb = null;
-    Animator animator = null;
-    bool isGrounded = false;
-    ParticleSystem dustParticles;
-
-    private const string HORIZONTAL = "Horizontal";
     private readonly int IsGroundedParam = Animator.StringToHash("IsGrounded");
     private readonly int SpeedParam = Animator.StringToHash("Speed");
     private readonly int VelocityParam = Animator.StringToHash("Velocity");
 
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private bool isInvencible;
+    [SerializeField] private float speed = 5f;
+    [SerializeField] private float jumpPower = 10f;
+    [SerializeField] private float checkRadius = 0.4f;
+    [SerializeField] private Transform groundCheck = null;
+    [SerializeField] private LayerMask groundLayer = 0;
+    [SerializeField] private ParticleSystem dustParticles;
+    [SerializeField] private ParticleSystem dieParticle;
+    private Rigidbody2D rb = null;
+    private Animator animator = null;
+    private PlayerInputController inputController;
+
+    public bool IsGrounded { get; private set; } = false;
+
+    private void Awake()
     {
+        inputController = GetComponent<PlayerInputController>();
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        dustParticles = GetComponentInChildren<ParticleSystem>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        float horizontal = Input.GetAxis(HORIZONTAL);
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundLayer);
+        float horizontal = inputController.Horizontal;
+        IsGrounded = Physics2D.OverlapCircle(groundCheck.position, checkRadius, groundLayer);
 
-        animator.SetBool(IsGroundedParam, isGrounded);
+        animator.SetBool(IsGroundedParam, IsGrounded);
         animator.SetFloat(VelocityParam, rb.velocity.y);
         animator.SetFloat(SpeedParam, Mathf.Abs(horizontal));
 
-        transform.GetComponent<SpriteRenderer>().flipX = horizontal < 0;
+        if (horizontal != 0)
+            transform.GetComponent<SpriteRenderer>().flipX = horizontal < 0;
         
-        if (isGrounded && Input.GetKeyDown(KeyCode.Space))
+        if (IsGrounded && inputController.IsJumped)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpPower);
         }
-        if (Input.GetKeyDown(KeyCode.K))
-            Kill();
 
         rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
     }
 
-    private void Kill()
-    {
-        UIManager.Instance.RestartGame();
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Death"))
+        if (!isInvencible && collision.CompareTag("Death"))
         {
-            UIManager.Instance.RestartGame();
+            Die();
         }
-        if(collision.CompareTag("Clouds"))
+        if (collision.CompareTag("Clouds"))
         {
-            rb.AddForce(Vector2.right * 1000f,ForceMode2D.Impulse);
+            rb.AddForce(Vector2.right * 1000f, ForceMode2D.Impulse);
             Debug.Log("Clouds!!");
         }
         if (collision.CompareTag("Coin"))
@@ -71,9 +66,17 @@ public class PlayerMovement : MonoBehaviour
         }
         if(collision.CompareTag("Finish"))
         {
-            UIManager.Instance.RestartGame();
+            LevelHandler.Instance.LoadNextLevel();
         }
         
+    }
+
+    private void Die()
+    {
+        dieParticle.transform.SetParent(null, true);
+        dieParticle.Play();
+        LevelHandler.Instance.ReloadLevel();
+        gameObject.SetActive(false);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
