@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEditor.Networking.PlayerConnection;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -67,6 +68,7 @@ public class PlayerMovement : MonoBehaviour
         if(collision.CompareTag("Finish"))
         {
             LevelHandler.Instance.LoadNextLevel();
+            GetComponent<PlayerInputController>().enabled = false;
         }
         
     }
@@ -75,8 +77,8 @@ public class PlayerMovement : MonoBehaviour
     {
         dieParticle.transform.SetParent(null, true);
         dieParticle.Play();
-        LevelHandler.Instance.ReloadLevel();
         gameObject.SetActive(false);
+        LevelHandler.Instance.ReloadLevel();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

@@ -25,6 +25,7 @@ public class PlayerInputController : MonoBehaviour
 
     private void OnDisable()
     {
+        Horizontal = 0;
         inputActions.Player.Disable();
     }
 

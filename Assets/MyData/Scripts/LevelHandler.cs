@@ -54,11 +54,12 @@ public class LevelHandler : MonoBehaviour
     }
     private IEnumerator AnimAndLoad()
     {
-        yield return new WaitForSeconds(1f);
+        // Play Animations such as deathParticles
+        yield return new WaitForSecondsRealtime(1f);
 
+        // Start Fading in
         animator.Play(fadeInClip.name);
-
-        yield return new WaitForSeconds(fadeInClip.length);
+        yield return new WaitForSecondsRealtime(fadeInClip.length);
 
         GameManager.LoadLevel(currentLevel);
 

@@ -6,7 +6,7 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
 
-    [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private LeanPopup pauseMenuPopup;
     [SerializeField] private GameObject mobileInputUI;
 
     private PlayerInputActions inputActions;
@@ -38,15 +38,23 @@ public class UIManager : MonoBehaviour
     {
         if (inputActions.UI.Pause.WasPressedThisFrame())
         {
-            bool isPaused = !pauseMenu.activeInHierarchy;
-            pauseMenu.SetActive(isPaused);
-            Time.timeScale = isPaused ? 0f : 1f;
+            if (pauseMenuPopup.isOpen)
+            {
+                PlayClicked();
+            }
+            else
+            {
+                pauseMenuPopup.Open();
+                pauseMenuPopup.onClose.RemoveAllListeners();
+                pauseMenuPopup.onOpen.AddListener(() => Time.timeScale = 0f);
+            }
         }
     }
 
     public void PlayClicked()
     {
         Time.timeScale = 1f;
+        pauseMenuPopup.Close();
     }
 
     public void RestartGame()
