@@ -18598,20 +18598,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 662039524770377718, guid: 947763113835872459b75ffa22a042f5,
-        type: 3}
-      propertyPath: parallaxFactor
-      value: -0.1
-      objectReference: {fileID: 0}
     - target: {fileID: 817549805670795371, guid: 947763113835872459b75ffa22a042f5,
         type: 3}
       propertyPath: m_Name
       value: Layer-0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1649179365250046352, guid: 947763113835872459b75ffa22a042f5,
-        type: 3}
-      propertyPath: parallaxFactor
-      value: -0.35
       objectReference: {fileID: 0}
     - target: {fileID: 2587203404302010039, guid: 947763113835872459b75ffa22a042f5,
         type: 3}
@@ -18672,11 +18662,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Layer-1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7362871204229803774, guid: 947763113835872459b75ffa22a042f5,
-        type: 3}
-      propertyPath: parallaxFactor
-      value: -0.25
       objectReference: {fileID: 0}
     - target: {fileID: 8961298400784372171, guid: 947763113835872459b75ffa22a042f5,
         type: 3}
