@@ -6,8 +6,9 @@ public class CoinItem : MonoBehaviour
 {
     [SerializeField] private AudioClip coinCollectClip;
 
-    private void OnDisable()
+    public void CollectCoin()
     {
         AudioSource.PlayClipAtPoint(coinCollectClip, transform.position);
+        gameObject.SetActive(false);
     }
 }

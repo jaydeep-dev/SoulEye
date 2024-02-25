@@ -14,7 +14,8 @@ public class GameManager
 
 public enum Scenes
 {
-    Level0,
     Level1,
+    Level2,
+    Level0,
     MainMenu,
 }

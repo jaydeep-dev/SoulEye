@@ -6,10 +6,11 @@ public class LevelHandler : MonoBehaviour
 {
     public static LevelHandler Instance { get; private set; }
 
-    [SerializeField] private List<Scenes> levelsList;
-
+    [SerializeField, Range(1f, 3f)] private float animatorSpeedModifier;
     [SerializeField] private AnimationClip fadeInClip;
     [SerializeField] private AnimationClip fadeOutClip;
+
+    [SerializeField] private List<Scenes> levelsList;
 
     private Animator animator;
     private Coroutine loadingLevelRoutine;
@@ -22,10 +23,16 @@ public class LevelHandler : MonoBehaviour
             Instance = this;
         else
             Destroy(gameObject);
+
         currentLevel = levelsList[0];
         DontDestroyOnLoad(gameObject);
 
         animator = GetComponentInChildren<Animator>();
+    }
+
+    private void Start()
+    {
+        animator.speed = animatorSpeedModifier;
     }
 
     public void ReloadLevel()
@@ -55,7 +62,7 @@ public class LevelHandler : MonoBehaviour
     private IEnumerator AnimAndLoad()
     {
         // Play Animations such as deathParticles
-        yield return new WaitForSecondsRealtime(1f);
+        yield return new WaitForSecondsRealtime(.5f);
 
         // Start Fading in
         animator.Play(fadeInClip.name);

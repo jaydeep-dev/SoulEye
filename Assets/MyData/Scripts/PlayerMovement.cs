@@ -1,6 +1,4 @@
-﻿using System;
-using UnityEditor.Networking.PlayerConnection;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -16,15 +14,18 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask groundLayer = 0;
     [SerializeField] private ParticleSystem dustParticles;
     [SerializeField] private ParticleSystem dieParticle;
+
     private Rigidbody2D rb = null;
     private Animator animator = null;
     private PlayerInputController inputController;
+    private PlayerSoundController soundController;
 
     public bool IsGrounded { get; private set; } = false;
 
     private void Awake()
     {
         inputController = GetComponent<PlayerInputController>();
+        soundController = GetComponent<PlayerSoundController>();
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
     }
@@ -61,9 +62,9 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(Vector2.right * 1000f, ForceMode2D.Impulse);
             Debug.Log("Clouds!!");
         }
-        if (collision.CompareTag("Coin"))
+        if (collision.TryGetComponent(out CoinItem coin))
         {
-            Destroy(collision.gameObject);
+            coin.CollectCoin();
         }
         if(collision.CompareTag("Finish"))
         {
@@ -78,6 +79,7 @@ public class PlayerMovement : MonoBehaviour
         dieParticle.transform.SetParent(null, true);
         dieParticle.Play();
         gameObject.SetActive(false);
+        soundController.Die();
         LevelHandler.Instance.ReloadLevel();
     }
 

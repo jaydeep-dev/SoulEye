@@ -9,7 +9,7 @@ public class MainmenuController : MonoBehaviour
 
     public void OnPlayBtnClicked()
     {
-        GameManager.LoadLevel(Scenes.Level0);
+        GameManager.LoadLevel(Scenes.Level1);
     }
 
     public void OnQuitBtnClicked()

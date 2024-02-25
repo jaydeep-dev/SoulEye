@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,7 +23,7 @@ public class PlayerSoundController : MonoBehaviour
             AudioSource.PlayClipAtPoint(jumpClip, transform.position, .3f);
     }
 
-    private void OnDisable()
+    public void Die()
     {
         AudioSource.PlayClipAtPoint(dieClip, transform.position);
     }

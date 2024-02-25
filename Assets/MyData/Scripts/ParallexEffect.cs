@@ -1,40 +1,38 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ParallexEffect : MonoBehaviour
 {
-    [SerializeField] private bool isLeftScroll;
     [SerializeField] private float parallexSpeed;
 
+    private Transform camTransform;
+    private Vector3 oldCamPos;
     private float spriteWidth;
-    private PlayerInputController playerInput;
-
-    private void Awake()
-    {
-        playerInput = GetComponent<PlayerInputController>();
-    }
+    private PlayerInputController controller;
 
     private void Start()
     {
         var sprite = GetComponent<SpriteRenderer>().sprite;
         spriteWidth = sprite.texture.width / sprite.pixelsPerUnit;
-
-        Debug.Log(spriteWidth);
-
-        if (isLeftScroll )
-        {
-            parallexSpeed = -parallexSpeed;
-        }
+        controller = PlayerInputController.Instance;
+        camTransform = Camera.main.transform;
+        oldCamPos = camTransform.localPosition;
+        //Debug.Log(spriteWidth);
     }
 
-    private void Update()
+    private void LateUpdate()
     {
-        transform.localPosition += (playerInput.Horizontal * parallexSpeed * Time.deltaTime * Vector3.right);
-
-        if(Mathf.Abs(transform.localPosition.x) - spriteWidth > 0)
+        if (camTransform.localPosition != oldCamPos)
         {
-            transform.localPosition = new Vector3(0f, transform.localPosition.y, transform.localPosition.z);
+            var delta = camTransform.localPosition.x - oldCamPos.x; // 11 - 10 = 1 || 10 - 11 = -1
+            Vector3 targetPos = delta * transform.localPosition;
+            //transform.localPosition = Vector3.Lerp(transform.localPosition, targetPos, parallexSpeed);
+            transform.localPosition = targetPos * parallexSpeed;
+
+            if (Mathf.Abs(transform.localPosition.x) - spriteWidth > 0)
+            {
+                transform.localPosition = new Vector3(0f, transform.localPosition.y, transform.localPosition.z);
+            }
+            oldCamPos = camTransform.localPosition;
         }
     }
 }

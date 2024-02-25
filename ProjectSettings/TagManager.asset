@@ -21,7 +21,7 @@ TagManager:
   - Ground
   - Postprocessing
   - Death
-  - 
+  - Player
   - 
   - 
   - 
@@ -42,9 +42,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Env
+    uniqueID: 2722372563
+    locked: 0
   - name: Fire
     uniqueID: 3804908061
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Player
+    uniqueID: 1826861743
     locked: 0

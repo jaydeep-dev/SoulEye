@@ -4853,8 +4853,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1826861743
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_RenderMode: 0
   m_MeshDistribution: 0
@@ -4933,7 +4933,7 @@ GameObject:
   - component: {fileID: 4129813772864684896}
   - component: {fileID: 124323272869010681}
   - component: {fileID: 3176854836152016013}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -4996,8 +4996,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1826861743
+  m_SortingLayer: 1
   m_SortingOrder: 5
   m_Sprite: {fileID: -2311659948842064771, guid: c483493eb3ec0f143b5d78ad823ac661,
     type: 3}
@@ -9996,8 +9996,8 @@ ParticleSystemRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1826861743
+  m_SortingLayer: 1
   m_SortingOrder: 10
   m_RenderMode: 0
   m_MeshDistribution: 0
